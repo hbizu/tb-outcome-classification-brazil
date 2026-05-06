@@ -1,6 +1,6 @@
 
 > **Paper:** *Comparison of Tree-Based Machine Learning Models for Classification of Tuberculosis Outcomes in Brazil*  
-> **Authors:** Heloísa de Almeida Pereira, Marcos Roberto Ribeiro, Ciniro Aparecido Leite Nametala
+> **Authors:** Heloísa de Almeida Pereira, Marcos Roberto Ribeiro, Ciniro Aparecido Leite Nametala   
 > **Affiliation:** Federal Institute of Minas Gerais (IFMG), Brazil  
 
 ---
@@ -89,49 +89,49 @@ After validation and exclusion of inconsistent records, the final dataset compri
 
 The following table describes **all columns present in the raw dataset**. Fields used in the study are marked with ✅.
 
-| Column | Type | Label (PT) | Description (EN) | Used in Study |
-|---|---|---|---|---|
-| `id_agravo` | text | ID do Agravo | Unique identifier code for the notifiable disease/condition (CID-10 code for tuberculosis). | ❌ |
-| `dt_notific` | text | Data de Notificação | Date on which the tuberculosis case was officially notified to the health system (DD/MM/YYYY). | ❌ |
-| `nu_ano` | text | Ano de Notificação | Year of notification. Derived from `dt_notific`; used in temporal analyses. Records from 2024 excluded due to incomplete data availability. | ❌ (derived use) |
-| `id_municip` | text | Município de Notificação | IBGE code of the municipality where the case was notified. High-cardinality variable; frequency encoded. | ✅ (freq. encoded) |
-| `id_regiona` | text | Regional de Notificação | Regional health district code responsible for the notification. | ✅ (one-hot encoded) |
-| `id_unidade` | text | Unidade de Notificação | Code for the health facility that notified the case. High-cardinality variable; frequency encoded. | ✅ (freq. encoded) |
-| `dt_diag` | text | Data de Diagnóstico | Date on which the tuberculosis diagnosis was confirmed (DD/MM/YYYY). Parsed with `pd.to_datetime(format="%d/%m/%Y")`. Used to derive `tempo_inicio_trat`. | ✅ (derived) |
-| `nu_idade_n` | text | Idade | Patient's age at the time of notification, in years. Used directly as a numerical feature after standardization. | ✅ (numerical) |
-| `cs_sexo` | text | Sexo | Biological sex of the patient. Values: `M` (Male), `F` (Female), `I` (Ignored). | ✅ (one-hot encoded) |
-| `cs_gestant` | text | Gestante | Pregnancy status at notification. Values: `1`–`3` (trimester), `4` (ignored gestational age), `5` (not applicable), `6` (not pregnant), `9` (ignored). | ❌ |
-| `cs_raca` | text | Raça/Cor | Self-declared race or skin color. Values: `1` (White), `2` (Black), `3` (Yellow/Asian), `4` (Brown/Mixed), `5` (Indigenous), `9` (Ignored). | ✅ (one-hot encoded) |
-| `cs_escol_n` | text | Escolaridade | Highest education level completed. Values: `0` (Illiterate), `1` (1st–4th grade incomplete), `2` (4th grade complete), `3` (5th–8th grade incomplete), `4` (Elementary complete), `5` (High school incomplete), `6` (High school complete), `7` (Higher incomplete), `8` (Higher complete), `9` (Ignored), `10` (Not applicable). | ✅ (one-hot encoded) |
-| `id_mn_resi` | text | Município de Residência | IBGE code of the municipality where the patient resides. May differ from `id_municip`. High-cardinality variable; frequency encoded. | ✅ (freq. encoded) |
-| `id_rg_resi` | text | Regional de Residência | Regional health district corresponding to the patient's municipality of residence. | ❌ |
-| `cs_zona` | text | Zona de Residência | Residential zone. Values: `1` (Urban), `2` (Rural), `3` (Peri-urban), `9` (Ignored). | ❌ |
-| `agravaids` | text | Aids | AIDS as an associated condition. After text normalization: `Sim` (Yes), `Nao` (No). | ✅ (one-hot encoded) |
-| `agravalcoo` | text | Alcoolismo | Alcohol use disorder as an associated condition. Same encoding as `agravaids`. | ✅ (one-hot encoded) |
-| `agravdiabe` | text | Diabetes | Diabetes as an associated condition. Same encoding as `agravaids`. | ✅ (one-hot encoded) |
-| `agravdoenc` | text | Doença Mental | Mental disorder as an associated condition. Same encoding as `agravaids`. | ✅ (one-hot encoded) |
-| `agravoutra` | text | Outras | Other associated conditions. Same encoding as `agravaids`. | ✅ (one-hot encoded) |
-| `agravdroga` | text | Uso de Drogas Ilícitas | Illicit drug use as an associated condition. Same encoding as `agravaids`. | ❌ |
-| `agravtabac` | text | Tabagismo | Tobacco use/smoking as an associated condition. Same encoding as `agravaids`. | ❌ |
-| `tratamento` | text | Tipo de Entrada | Type of treatment entry. Values: `1` (New case), `2` (Relapse), `3` (Return after abandonment), `4` (Transfer), `5` (Post-cure relapse), `6` (Not informed). | ✅ (one-hot encoded) |
-| `cultura_es` | text | Cultura de Escarro | Sputum (or other material) culture result for TB bacilli. Values: `1` (Positive), `2` (Negative), `3` (Contaminated), `4` (In progress), `5` (Not performed), `9` (Ignored). | ✅ (one-hot encoded) |
-| `hiv` | text | HIV | HIV serology result. After text normalization: `Positiva` (Positive), `Negativa` (Negative). | ✅ (one-hot encoded) |
-| `histopatol` | text | Histopatologia | Histopathological examination result for TB diagnosis. Values: `1` (Compatible/Suggestive), `2` (Not compatible), `3` (Inconclusive), `4` (Not performed), `9` (Ignored). | ✅ (one-hot encoded) |
-| `dt_inic_tr` | text | Data de Início do Tratamento | Date on which the patient started the current treatment (DD/MM/YYYY). Parsed with `pd.to_datetime(format="%d/%m/%Y")`. Used to derive `tempo_inicio_trat`. | ✅ (derived) |
-| `bacilosc_1` | text | Baciloscopia 1º Mês | Sputum smear microscopy at month 1. Values: `1` (Negative), `2` (+), `3` (++), `4` (+++), `5` (Not performed), `6` (Not applicable), `9` (Ignored). | ❌ |
-| `bacilosc_2` | text | Baciloscopia 2º Mês | Sputum smear at month 2. Same encoding as `bacilosc_1`. | ❌ |
-| `bacilosc_3` | text | Baciloscopia 3º Mês | Sputum smear at month 3. Same encoding as `bacilosc_1`. | ❌ |
-| `bacilosc_4` | text | Baciloscopia 4º Mês | Sputum smear at month 4. Same encoding as `bacilosc_1`. | ❌ |
-| `bacilosc_5` | text | Baciloscopia 5º Mês | Sputum smear at month 5. Same encoding as `bacilosc_1`. | ❌ |
-| `bacilosc_6` | text | Baciloscopia 6º Mês | Sputum smear at month 6. Same encoding as `bacilosc_1`. | ❌ |
-| `tratsup_at` | text | TDO | Directly Observed Therapy (DOT) status. Values: `1` (Daily), `2` (Weekly), `3` (Not performed), `4` (Other), `9` (Ignored). | ❌ |
-| `situa_ence` | text | Situação de Encerramento | **Target variable.** Case outcome at closure. See [Target Variable](#target-variable). | ✅ (target) |
-| `dt_encerra` | text | Data de Encerramento | Date on which the case was officially closed (DD/MM/YYYY). | ❌ |
-| `pop_liber` | text | População Privada de Liberdade | Whether the patient belongs to the incarcerated population. Values: `1` (Yes), `2` (No), `9` (Ignored). | ❌ |
-| `test_molec` | text | Teste Molecular Rápido (TMR-TB) | Rapid molecular test result (Xpert MTB/RIF or equivalent). Values: `1` (Detected — Rifampicin resistant), `2` (Detected — sensitive), `3` (Detected — indeterminate), `4` (Not detected), `5` (Inconclusive), `6` (Not performed), `9` (Ignored). | ❌ |
-| `test_sensi` | text | Teste de Sensibilidade | Drug susceptibility test result. Values: `1` (Sensitive to all), `2` (Isoniazid resistant), `3` (Rifampicin resistant), `4` (MDR), `5` (Other resistance), `6` (Not performed), `9` (Ignored). | ❌ |
-| `raiox_tora` | text | Radiografia do Tórax | Chest X-ray result. Values: `1` (Normal), `2` (Pleural effusion), `3` (Primary lesion), `4` (Infiltrate, no cavitation), `5` (Infiltrate with cavitation), `6` (Miliary), `7` (Other), `8` (Not performed), `9` (Ignored). | ❌ |
-| `forma` | text | Forma Clínica | Clinical form of tuberculosis. Values: `1` (Pulmonary), `2` (Extrapulmonary), `3` (Pulmonary + Extrapulmonary). | ✅ (one-hot encoded) |
+| Column | Type | Label (PT) | Label (EN) | Description (EN) | Used in Study |
+|---|---|---|---|---|---|
+| `id_agravo` | text | ID do Agravo | Disease ID | Unique identifier code for the notifiable disease/condition (CID-10 code for tuberculosis). | ❌ |
+| `dt_notific` | text | Data de Notificação | Notification Date | Date on which the tuberculosis case was officially notified to the health system (DD/MM/YYYY). | ❌ |
+| `nu_ano` | text | Ano de Notificação | Notification Year | Year of notification. Derived from `dt_notific`; used in temporal analyses. Records from 2024 excluded due to incomplete data availability. | ❌ (derived use) |
+| `id_municip` | text | Município de Notificação | Notification Municipality | IBGE code of the municipality where the case was notified. High-cardinality variable; frequency encoded. | ✅ (freq. encoded) |
+| `id_regiona` | text | Regional de Notificação | Notification Health Region | Regional health district code responsible for the notification. | ✅ (one-hot encoded) |
+| `id_unidade` | text | Unidade de Notificação | Notification Health Unit | Code for the health facility that notified the case. High-cardinality variable; frequency encoded. | ✅ (freq. encoded) |
+| `dt_diag` | text | Data de Diagnóstico | Diagnosis Date | Date on which the tuberculosis diagnosis was confirmed (DD/MM/YYYY). Parsed with `pd.to_datetime(format="%d/%m/%Y")`. Used to derive `tempo_inicio_trat`. | ✅ (derived) |
+| `nu_idade_n` | text | Idade | Age | Patient's age at the time of notification, in years. Used directly as a numerical feature after standardization. | ✅ (numerical) |
+| `cs_sexo` | text | Sexo | Sex | Biological sex of the patient. Values: `M` (Male), `F` (Female), `I` (Ignored). | ✅ (one-hot encoded) |
+| `cs_gestant` | text | Gestante | Pregnancy Status | Pregnancy status at notification. Values: `1`–`3` (trimester), `4` (ignored gestational age), `5` (not applicable), `6` (not pregnant), `9` (ignored). | ❌ |
+| `cs_raca` | text | Raça/Cor | Race/Ethnicity | Self-declared race or skin color. Values: `1` (White), `2` (Black), `3` (Asian), `4` (Brown/Mixed), `5` (Indigenous), `9` (Ignored). | ✅ (one-hot encoded) |
+| `cs_escol_n` | text | Escolaridade | Education Level | Highest education level completed. Values range from illiterate to higher education complete. | ✅ (one-hot encoded) |
+| `id_mn_resi` | text | Município de Residência | Municipality of Residence | IBGE code of the municipality where the patient resides. May differ from notification municipality. | ✅ (freq. encoded) |
+| `id_rg_resi` | text | Regional de Residência | Health Region of Residence | Regional health district corresponding to the patient's residence. | ❌ |
+| `cs_zona` | text | Zona de Residência | Area of Residence | Residential zone: urban, rural, or peri-urban. | ❌ |
+| `agravaids` | text | Aids | AIDS | AIDS as an associated condition. After normalization: Yes/No. | ✅ (one-hot encoded) |
+| `agravalcoo` | text | Alcoolismo | Alcohol Use Disorder | Alcohol use disorder as an associated condition. | ✅ (one-hot encoded) |
+| `agravdiabe` | text | Diabetes | Diabetes | Diabetes as an associated condition. | ✅ (one-hot encoded) |
+| `agravdoenc` | text | Doença Mental | Mental Disorder | Mental disorder as an associated condition. | ✅ (one-hot encoded) |
+| `agravoutra` | text | Outras | Other Conditions | Other associated conditions. | ✅ (one-hot encoded) |
+| `agravdroga` | text | Uso de Drogas Ilícitas | Illicit Drug Use | Illicit drug use as an associated condition. | ❌ |
+| `agravtabac` | text | Tabagismo | Smoking | Tobacco use/smoking as an associated condition. | ❌ |
+| `tratamento` | text | Tipo de Entrada | Treatment Entry Type | Type of treatment entry (new case, relapse, return after abandonment, etc.). | ✅ (one-hot encoded) |
+| `cultura_es` | text | Cultura de Escarro | Sputum Culture | Culture result for TB bacilli. | ✅ (one-hot encoded) |
+| `hiv` | text | HIV | HIV Status | HIV serology result (Positive/Negative). | ✅ (one-hot encoded) |
+| `histopatol` | text | Histopatologia | Histopathology | Histopathological exam result for TB diagnosis. | ✅ (one-hot encoded) |
+| `dt_inic_tr` | text | Data de Início do Tratamento | Treatment Start Date | Date when treatment started. Used to derive `tempo_inicio_trat`. | ✅ (derived) |
+| `bacilosc_1` | text | Baciloscopia 1º Mês | Smear Microscopy Month 1 | Sputum smear result at month 1. | ❌ |
+| `bacilosc_2` | text | Baciloscopia 2º Mês | Smear Microscopy Month 2 | Sputum smear result at month 2. | ❌ |
+| `bacilosc_3` | text | Baciloscopia 3º Mês | Smear Microscopy Month 3 | Sputum smear result at month 3. | ❌ |
+| `bacilosc_4` | text | Baciloscopia 4º Mês | Smear Microscopy Month 4 | Sputum smear result at month 4. | ❌ |
+| `bacilosc_5` | text | Baciloscopia 5º Mês | Smear Microscopy Month 5 | Sputum smear result at month 5. | ❌ |
+| `bacilosc_6` | text | Baciloscopia 6º Mês | Smear Microscopy Month 6 | Sputum smear result at month 6. | ❌ |
+| `tratsup_at` | text | TDO | Directly Observed Therapy (DOT) | DOT status during treatment. | ❌ |
+| `situa_ence` | text | Situação de Encerramento | Treatment Outcome | **Target variable.** Case outcome at closure. | ✅ (target) |
+| `dt_encerra` | text | Data de Encerramento | Case Closure Date | Date when the case was closed. | ❌ |
+| `pop_liber` | text | População Privada de Liberdade | Incarcerated Population | Whether the patient is incarcerated. | ❌ |
+| `test_molec` | text | Teste Molecular Rápido | Rapid Molecular Test | Rapid molecular test result (e.g., Xpert MTB/RIF). | ❌ |
+| `test_sensi` | text | Teste de Sensibilidade | Drug Susceptibility Test | Drug resistance test result. | ❌ |
+| `raiox_tora` | text | Radiografia do Tórax | Chest X-ray | Chest radiography result. | ❌ |
+| `forma` | text | Forma Clínica | Clinical Form | Clinical presentation of tuberculosis (pulmonary, extrapulmonary, or both). | ✅ (one-hot encoded) |
 
 ---
 

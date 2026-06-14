@@ -1,7 +1,8 @@
 
 > **Paper:** *Comparison of Tree-Based Machine Learning Models for Classification of Tuberculosis Outcomes in Brazil*  
 > **Authors:** Heloísa de Almeida Pereira, Marcos Roberto Ribeiro, Ciniro Aparecido Leite Nametala   
-> **Affiliation:** Federal Institute of Minas Gerais (IFMG), Brazil  
+> **Affiliation:** Federal Institute of Minas Gerais (IFMG), Brazil   
+> **ID:** 10507 
 
 ---
 
